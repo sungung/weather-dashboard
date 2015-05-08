@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-http="http://www.springframework.org/schema/integration/http"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-4.1.xsd">
+    <!--
+    <int:inbound-channel-adapter channel="bomRequestChannel" expression="'forecasts'">
+        <int:poller fixed-rate="60000"/>
+    </int:inbound-channel-adapter>
+
+    <int:inbound-channel-adapter channel="bomRequestChannel" expression="'observations'">
+        <int:poller fixed-rate="40000"/>
+    </int:inbound-channel-adapter>
+    -->
+
+    <int:channel id="bomRequestChannel"/>
+
+    <int-http:outbound-gateway id="bomGateway"
+                               url="http://www.bom.gov.au/vic/{docType}/melbourne.shtml?ref=hdr"
+                               request-channel="bomRequestChannel"
+                               reply-channel="bomResponseChannel"
+                               http-method="GET"
+                               message-converters="bomForecastHttpConverter"
+                               expected-response-type="com.dpworld.weather.web.model.Forecast">
+        <int-http:uri-variable name="docType" expression="payload"/>
+    </int-http:outbound-gateway>
+
+    <int:channel id="bomResponseChannel">
+        <int:queue capacity="10"/>
+    </int:channel>
+
+    <int-stream:stdout-channel-adapter channel="bomResponseChannel"/>
+
+</beans>
+
+<!--
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd">
+
+    <bean id="ftpClientFactory" class="com.dpworld.weather.util.ProxyFtpSessionFactory">
+        <property name="host" value="${bom.ftp.server}"/>
+        <property name="port" value="${bom.ftp.server.port}"/>
+        <property name="username" value="anonymous"/>
+        <property name="password" value="guest"/>
+        <property name="proxyHost" value="${proxy.host}"/>
+        <property name="proxyPort" value="${proxy.port}"/>
+        <property name="proxyUsername" value="${proxy.username}"/>
+        <property name="proxyPassword" value="${proxy.password}"/>
+    </bean>
+
+    <int-ftp:inbound-channel-adapter id="ftpInbound"
+                                     channel="ftpChannel"
+                                     session-factory="ftpClientFactory"
+                                     remote-directory="anon/gen/fwo"
+                                     filename-pattern="*.xml"
+                                     auto-create-local-directory="true"
+                                     delete-remote-files="false"
+                                     local-directory="file:/bom">
+        <int:poller fixed-rate="3600000"/>
+    </int-ftp:inbound-channel-adapter>
+
+    <int:channel id="ftpChannel">
+        <int:queue/>
+    </int:channel>
+
+</beans>
+-->

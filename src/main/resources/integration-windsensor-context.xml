@@ -14,6 +14,7 @@
 		http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-4.1.xsd
         http://www.springframework.org/schema/integration/jpa http://www.springframework.org/schema/integration/jpa/spring-integration-jpa.xsd">
 
+
     <int:poller default="true" fixed-delay="50"/>
 
     <int:channel id="asciiChannel">
@@ -22,8 +23,8 @@
 
     <int-ip:tcp-connection-factory id="clientFactory"
                                    type="client"
-                                   host="${censor.berth.ip}"
-                                   port="${censor.berth.port}"
+                                   host="${sensor.berth.ip}"
+                                   port="${sensor.berth.port}"
                                    single-use="false"
                                    so-timeout="10000"/>
 
@@ -36,5 +37,6 @@
         <int:transformer ref="weatherService" method="transform"/>
         <int:service-activator ref="weatherRepository" method="save"/>
     </int:chain>
+
 
 </beans>

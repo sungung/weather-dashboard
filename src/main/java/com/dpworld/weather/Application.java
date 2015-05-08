@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ImportResource;
  * @since 0.0.1
  */
 @SpringBootApplication
-@ImportResource("integration-context.xml")
+@ImportResource({"integration-windsensor-context.xml","integration-bom-context.xml"})
 public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {

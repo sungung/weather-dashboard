@@ -16,6 +16,8 @@ public class Weather {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
     private String type;
+    private double observation;
+    private int direction;
     private String payload;
 
     public Long getId() {
@@ -48,6 +50,22 @@ public class Weather {
 
     public void setPayload(String payload) {
         this.payload = payload;
+    }
+
+    public double getObservation() {
+        return observation;
+    }
+
+    public void setObservation(double observation) {
+        this.observation = observation;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 
     @Override

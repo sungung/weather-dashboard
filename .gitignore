@@ -43,6 +43,10 @@ Temporary Items
 .apdisk
 
 # Ignore compiled code
+deploy
 target
 target/*
+node_modules
+src/main/resources/appsources/bower_components
+src/main/resources/static
 *.iml
