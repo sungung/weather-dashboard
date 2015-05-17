@@ -33,7 +33,7 @@ public class WeatherGatewayTests {
 
     @Test
     public void testHttpOutbound() {
-        bomRequestChannel.send(MessageBuilder.withPayload("forecasts").build());
+        bomRequestChannel.send(MessageBuilder.withPayload("").build());
         Message<?> message = bomResponseChannel.receive();
         assertThat(message.getPayload(), is(notNullValue()));
     }

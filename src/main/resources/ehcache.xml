@@ -1,0 +1,28 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
+         updateCheck="true"
+         monitoring="autodetect"
+         dynamicConfig="true">
+
+    <diskStore path="java.io.tmpdir" />
+
+    <!--
+    This cache contains a maximum in memory of 100 elements, and will expire
+    an element if it is idle for more than 30 minutes and lives for more than
+    60 minutes.
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="3600"
+    -->
+    <cache name="forecast"
+           maxEntriesLocalHeap="100"
+           maxEntriesLocalDisk="10"
+           eternal="false"
+           diskSpoolBufferSizeMB="10"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="3600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+        <persistence strategy="localTempSwap" />
+    </cache>
+
+</ehcache>

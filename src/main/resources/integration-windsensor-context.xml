@@ -34,9 +34,8 @@
                                         client-mode="true"/>
 
     <int:chain input-channel="asciiChannel" output-channel="nullChannel">
-        <int:transformer ref="weatherService" method="transform"/>
+        <int:transformer expression="@weatherService.transform(payload,T(com.dpworld.weather.persist.Station).ADMIN)" />
         <int:service-activator ref="weatherRepository" method="save"/>
     </int:chain>
-
 
 </beans>

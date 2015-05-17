@@ -1,5 +1,8 @@
 package com.dpworld.weather.web.model;
 
+import com.dpworld.weather.Utils;
+
+import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,13 +11,14 @@ import java.util.List;
  * @author PARK Sungung
  * @since 0.0.1
  */
-public class Forecast {
+public class Forecast implements Serializable {
     private Date timestamp;
+    private String relativeTime;
     private String issued;
     private String city;
     private List<DailyForecast> dailyForecasts = new LinkedList<DailyForecast>();
 
-    public static class DailyForecast {
+    public static class DailyForecast implements Serializable {
         private Date date;
         private String header;
         private String forecast;
@@ -99,6 +103,9 @@ public class Forecast {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+        if (timestamp != null) {
+            this.relativeTime = Utils.prettyPeriod(timestamp);
+        }
     }
 
     public String getIssued() {

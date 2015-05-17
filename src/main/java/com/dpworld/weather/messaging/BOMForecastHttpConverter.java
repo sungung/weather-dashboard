@@ -1,6 +1,7 @@
 package com.dpworld.weather.messaging;
 
 import com.dpworld.weather.web.model.Forecast;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -60,9 +61,8 @@ public class BOMForecastHttpConverter implements HttpMessageConverter<Forecast>{
 
                 Forecast.DailyForecast dailyForecast = forecast.newDailyForecast();
                 forecast.getDailyForecasts().add(dailyForecast);
-
                 dailyForecast.setHeader(getFirstNodeText(document, "//*[@id=\"content\"]/div[" + i + "]/h2"));
-                dailyForecast.setIcon(getFirstNodeText(document, "//*[@id=\"content\"]/div[" + i + "]/div/dl/dd[1]/img"));
+                dailyForecast.setIcon(translateIcon(getFirstNodeText(document, "//*[@id=\"content\"]/div[" + i + "]/div/dl/dd[1]/img")));
                 dailyForecast.setForecast(getFirstNodeText(document, "//*[@id=\"content\"]/div[" + i + "]/div/p"));
 
                 if (i == 1) {
@@ -79,6 +79,83 @@ public class BOMForecastHttpConverter implements HttpMessageConverter<Forecast>{
             throw new HttpMessageConversionException("Failed to convert response to: " + aClass, e);
         }
         return forecast;
+    }
+
+    private String translateIcon(String bomImage) {
+
+        if (StringUtils.isEmpty(bomImage)) {
+            return "wi-umbrella";
+        }
+
+        if (bomImage.indexOf("/sunny") > 0) {
+            return "wi-day-sunny";
+        }
+
+        if (bomImage.indexOf("/clear") > 0) {
+            return "wi-moon-waxing-cresent-2";
+        }
+
+        if (bomImage.indexOf("/partly-cloudy") > 0) {
+            return "wi-day-cloudy";
+        }
+
+        if (bomImage.indexOf("/cloudy") > 0) {
+            return "wi-cloudy";
+        }
+
+        if (bomImage.indexOf("/hazy") > 0) {
+            return "wi-day-fog";
+        }
+
+        if (bomImage.indexOf("/light-rain") > 0) {
+            return "wi-rain";
+        }
+
+        if (bomImage.indexOf("/wind") > 0) {
+            return "wi-strong-wind";
+        }
+
+        if (bomImage.indexOf("/fog") > 0) {
+            return "wi-day-fog";
+        }
+
+        if (bomImage.indexOf("/showers") > 0) {
+            return "wi-showers";
+        }
+
+        if (bomImage.indexOf("/rain") > 0) {
+            return "wi-rain";
+        }
+
+        if (bomImage.indexOf("/dust") > 0) {
+            return "wi-strong-windy";
+        }
+
+        if (bomImage.indexOf("/frost") > 0) {
+            return "wi-snowflake-cold";
+        }
+
+        if (bomImage.indexOf("/snow") > 0) {
+            return "wi-snow";
+        }
+
+        if (bomImage.indexOf("/storm") > 0) {
+            return "wi-storm-showers";
+        }
+
+        if (bomImage.indexOf("/light-showers") > 0) {
+            return "wi-day-showers";
+        }
+
+        if (bomImage.indexOf("/heavy-showers") > 0) {
+            return "wi-day-rain";
+        }
+
+        if (bomImage.indexOf("/tropicalcyclone") > 0) {
+            return "wi-hurricane";
+        }
+
+        return "wi-umbrella";
     }
 
     private String getFirstNodeText(Document document, String xpath) {

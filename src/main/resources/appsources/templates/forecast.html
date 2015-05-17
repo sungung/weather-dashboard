@@ -1,0 +1,21 @@
+<div class="row" data-ng-controller="ForecastCtrl">
+  <div class="col-lg-12">
+    <rd-widget>
+      <rd-widget-header icon="fa-umbrella" title="Weather Forecast">
+          {{forecast.forecast.issued}}
+      </rd-widget-header>
+      <rd-widget-body>
+        <div class="media" data-ng-repeat="daily in forecast.forecast.dailyForecasts">
+            <div class="media widget-icon green pull-left">
+                <i class="{{'wi ' + daily.icon}}"></i>
+            </div>
+            <div class="media-body">
+                <blockquote><h4 class="media-heading"><code>{{daily.header}}</code> <small>{{daily.summary}}</small></h4></blockquote>
+                <p><samll>{{daily.maxTemp ? 'Max ' + daily.maxTemp + 'C' : '&nbsp;'}} {{daily.minTemp ? ', Min ' + daily.minTemp + 'C' : '&nbsp;'}}</samll></p>
+                <p><samll>{{daily.forecast}}</samll></p>
+            </div>
+        </div>
+      </rd-widget-body>
+    </rd-widget>
+  </div>
+</div>

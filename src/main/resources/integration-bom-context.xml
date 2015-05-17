@@ -21,20 +21,17 @@
     <int:channel id="bomRequestChannel"/>
 
     <int-http:outbound-gateway id="bomGateway"
-                               url="http://www.bom.gov.au/vic/{docType}/melbourne.shtml?ref=hdr"
+                               url="${bom.url.forecast}"
                                request-channel="bomRequestChannel"
                                reply-channel="bomResponseChannel"
                                http-method="GET"
                                message-converters="bomForecastHttpConverter"
                                expected-response-type="com.dpworld.weather.web.model.Forecast">
-        <int-http:uri-variable name="docType" expression="payload"/>
     </int-http:outbound-gateway>
 
     <int:channel id="bomResponseChannel">
         <int:queue capacity="10"/>
     </int:channel>
-
-    <int-stream:stdout-channel-adapter channel="bomResponseChannel"/>
 
 </beans>
 

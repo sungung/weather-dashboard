@@ -15,6 +15,8 @@ public class Weather {
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
+    @Enumerated(EnumType.STRING)
+    private Station station;
     private String type;
     private double observation;
     private int direction;
@@ -34,6 +36,14 @@ public class Weather {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
     }
 
     public String getType() {
